@@ -1,0 +1,5 @@
+arquivos\fake_file_1MB.txt	500	221ms
+arquivos\fake_file_1MB.txt	500	19ms
+arquivos\fake_file_1MB.txt	500	20ms
+arquivos\fake_file_1MB.txt	500	20ms
+arquivos\fake_file_1MB.txt	500	21ms
