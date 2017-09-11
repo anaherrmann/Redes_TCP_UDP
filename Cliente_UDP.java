@@ -1,5 +1,4 @@
 
-import static Servidor.SERVIDOR;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import javax.swing.JOptionPane;
+import java.nio.ByteBuffer;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author herrmann
  */
-public class Cliente {
+public class Cliente_UDP {
 
     public static final int PORTA = 8000;
     public static final String SERVIDOR = "localhost"; //127.0.0.1
@@ -36,6 +36,7 @@ public class Cliente {
             String requestMsg = "Send me the file.";
             byte[] reqMsg = requestMsg.getBytes();
             
+
             InetAddress IPAddress = InetAddress.getByName(SERVIDOR);
             DatagramSocket clientSocket = new DatagramSocket();
             
@@ -43,18 +44,24 @@ public class Cliente {
             DatagramPacket sendPacket = new DatagramPacket(reqMsg, reqMsg.length, IPAddress, PORTA);
             clientSocket.send(sendPacket);
             
-            DatagramPacket receivePacket;
-            receivePacket.
-            
-            
+            byte[] receiveData = new byte[4];
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            clientSocket.receive(receivePacket);   
+
+            int fileLength = ByteBuffer.wrap(receivePacket.getData()).getInt();
+            System.out.println(fileLength);
             byte[] fileChunk = new byte[sizePacket];
 
             int bytesRead = 0;
             
-            while () {
+            while (true) {
+            	int sequenceNumber;
                 receivePacket = new DatagramPacket(fileChunk, sizePacket);
                 clientSocket.receive(receivePacket);
-                buffer.write(fileChunk, 0, bytesRead);
+                sequenceNumber[0] = fileChunk[0];
+                sequenceNumber[1] = fileChunk[1];
+                System.out.println(fileChunk);
+                buffer.write(fileChunk, 2, bytesRead);
                
             }
 

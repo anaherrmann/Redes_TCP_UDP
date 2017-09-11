@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /*
@@ -18,7 +19,7 @@ import java.util.Arrays;
  *
  * @author herrmann
  */
-public class Servidor {
+public class Servidor_UDP {
 
     public static final int PORTA = 8000;
     public static final String SERVIDOR = "localhost"; //127.0.0.1
@@ -27,7 +28,10 @@ public class Servidor {
         
         DatagramSocket serverSocket = new DatagramSocket(PORTA);
         int sizePacket = Integer.parseInt(args[1]);
+        long sequenceNumber = 0;
         try {
+
+        	System.out.println("Aguardando conexao");
             byte[] receiveData = new byte[256];
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);
@@ -47,12 +51,15 @@ public class Servidor {
                 
                 FileInputStream file_send = new FileInputStream(send);
                 BufferedInputStream buff_file = new BufferedInputStream(file_send);
-//confraria arquizio vavo
+//confraria arquizio vavo 
 
                 byte[] fileChunk;
+
                 long position = 0; //"ponteiro"
 
                 while(position != fileLength){
+                	sequenceNumber++;
+
                     if(fileLength - position >= sizePacket)
                         position += sizePacket; 
                    else {
@@ -60,6 +67,9 @@ public class Servidor {
                         position = fileLength;
                     }
                     fileChunk = new byte[sizePacket];
+                    fileChunk[0] = ByteUtils.convertToBytes(sequenceNumber)[0];
+                    fileChunk[1] = ByteUtils.convertToBytes(sequenceNumber)[1];
+                    
                     buff_file.read(fileChunk, 0, sizePacket);
                     DatagramPacket packet = new DatagramPacket(fileChunk, sizePacket, IPClient, PORTA);
                     DatagramSocket connection = new DatagramSocket();
