@@ -1,7 +1,4 @@
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Cliente {
@@ -12,13 +9,11 @@ public class Cliente {
     public static void main(String args[]) {
 
         int sizePacket = Integer.parseInt(args[1]);
-		String fileName = args[0].substring(args[0].lastIndexOf("\\") + 1).trim();
-
+	String fileName = args[0].substring(args[0].lastIndexOf("\\") + 1).trim();
         System.out.println("Tamanho do Pacote: " + sizePacket);
         System.out.println("Arquivo: " + fileName);
 
         try {
-           
             Socket socket = new Socket(SERVIDOR, PORTA);
             FileOutputStream file = new FileOutputStream(args[0]);
             BufferedOutputStream buffer = new BufferedOutputStream(file);
@@ -37,7 +32,5 @@ public class Cliente {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 }
